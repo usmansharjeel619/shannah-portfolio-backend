@@ -148,11 +148,19 @@ app.get("/api/blog/:id", async (req, res) => {
 
 app.post("/api/blog", upload.single("image"), async (req, res) => {
   try {
+    // Create excerpt from HTML content
+    const stripHtml = (html) => {
+      return html.replace(/<[^>]*>/g, "").trim();
+    };
+
     const blogData = {
       ...req.body,
-      excerpt: req.body.content.substring(0, 150) + "...",
+      excerpt:
+        req.body.excerpt ||
+        stripHtml(req.body.content).substring(0, 150) + "...",
       image: req.file ? `/uploads/${req.file.filename}` : null,
     };
+
     const blog = new Blog(blogData);
     await blog.save();
     res.status(201).json(blog);
@@ -163,13 +171,21 @@ app.post("/api/blog", upload.single("image"), async (req, res) => {
 
 app.put("/api/blog/:id", upload.single("image"), async (req, res) => {
   try {
+    const stripHtml = (html) => {
+      return html.replace(/<[^>]*>/g, "").trim();
+    };
+
     const updateData = {
       ...req.body,
-      excerpt: req.body.content.substring(0, 150) + "...",
+      excerpt:
+        req.body.excerpt ||
+        stripHtml(req.body.content).substring(0, 150) + "...",
     };
+
     if (req.file) {
       updateData.image = `/uploads/${req.file.filename}`;
     }
+
     const blog = await Blog.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
     });
