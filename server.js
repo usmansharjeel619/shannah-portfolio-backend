@@ -88,7 +88,27 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // API Routes
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  const dbStatus =
+    mongoose.connection.readyState === 1 ? "connected" : "disconnected";
+  res.json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    database: dbStatus,
+    uptime: process.uptime(),
+    message: "Shannah Portfolio API is running!",
+  });
+});
 
+// Root endpoint
+app.get("/", (req, res) => {
+  res.json({
+    message: "Shannah Portfolio API Server",
+    status: "running",
+    endpoints: ["/api/health", "/api/portfolio", "/api/blog", "/api/contact"],
+  });
+});
 // Portfolio Routes
 app.get("/api/portfolio", async (req, res) => {
   try {
