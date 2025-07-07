@@ -8,8 +8,22 @@ const fs = require("fs");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// CORS Configuration
+const corsOptions = {
+  origin: [
+    "https://shannahjongstra.be",
+    "https://www.shannahjongstra.be",
+    "http://localhost:3000", // For local development
+    "http://localhost:3001", // For local development
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
