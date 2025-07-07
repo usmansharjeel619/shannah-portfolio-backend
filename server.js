@@ -19,7 +19,7 @@ if (!fs.existsSync("uploads")) {
 }
 
 // MongoDB Connection
-mongoose.connect("mongodb://localhost:27017/shannah_portfolio", {
+mongoose.connect("mongodb://127.0.0.1:27017/shannah_portfolio", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
