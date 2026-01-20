@@ -121,6 +121,15 @@ app.get("/api/portfolio", async (req, res) => {
   }
 });
 
+app.get("/api/portfolio/:id", async (req, res) => {
+  try {
+    const portfolio = await Portfolio.findById(req.params.id);
+    res.json(portfolio);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post("/api/portfolio", upload.single("image"), async (req, res) => {
   try {
     const portfolioData = {
